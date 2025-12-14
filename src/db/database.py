@@ -1,12 +1,10 @@
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 
 from config.settings import settings
 
 
-POSTGRES_URL = f'postgresql+asyncpg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@' \
-               f'{settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}'
-engine = create_async_engine(POSTGRES_URL)
+engine = create_async_engine(settings.database_url, pool_pre_ping=True)
 
 async_database_session_maker = async_sessionmaker(bind=engine, expire_on_commit=False)
 
